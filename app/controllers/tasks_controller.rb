@@ -69,24 +69,8 @@ class TasksController < ApplicationController
     user_id = params[:task][:user_id].to_i
     
     if @task.update_attributes(:user_id => user_id)
-      Pony.options = {
-        :to => @task.user.email,
-        :body => 'You have been assigned to a task.',
-        :via => :smtp,
-        :via_options => {
-          :address              => 'smtp.gmail.com',
-          :port                 => '587',
-          :enable_starttls_auto => true,
-          :user_name            => ENV[:MAIL_ACCOUNT],
-          :password             => ENV[:MAIL_PASSWORD],
-          :authentication       => :plain, # :plain, :login, :cram_md5, no auth by default
-          :domain               => "localhost.localdomain" # the HELO domain provided by the client to the server
-        }
-      }
-
-      Pony.mail(:from => 'taskmate.ocs@gmail.com')
-      
-      redirect_to task_path(@task.url), :notice => "You have notified #{@task.user.name} of their new task."
+      UserMailer.notify_task(@user).deliver
+      redirect_to task_path(@task.url), :notice => "#{@task.user.name} has been notified."
     else
       render "edit", :alert => "Oh, no, something went wrong!"
     end

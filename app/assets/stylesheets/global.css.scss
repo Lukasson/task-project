@@ -1,3 +1,6 @@
+$background_c: #392B1D;
+
+
 html {
   box-sizing: border-box;
   width: 100%;
@@ -14,7 +17,7 @@ html {
 
 body {
   margin: 0;
-  background-color: #392B1D;
+  background-color: $background_c;
 }
 
 #alert {

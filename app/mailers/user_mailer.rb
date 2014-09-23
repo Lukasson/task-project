@@ -1,3 +1,8 @@
 class UserMailer < ActionMailer::Base
-  default from: "from@example.com"
+  default from: "ocs.mailtest1@gmail.com"
+  
+  def notify_task(user)
+    @user = user
+    mail(to: user.email, subject: "Task Assignment")
+  end
 end
